@@ -1,3 +1,6 @@
+WristX = "";
+WristY = "";
+Wrist_Score = "";
 
 /*created by prashant shukla */
 
@@ -30,6 +33,7 @@ function setup(){
   video.hide();
 
   poseNet = ml5.poseNet(video, ModelLoaded);
+  poseNet.on('pose', gotPoses);
 }
 
 function ModelLoaded()
@@ -37,8 +41,26 @@ function ModelLoaded()
   console.log('ModelLoaded!');
 }
 
+function gotPoses(results)
+{
+  if(results.length > 0)
+  {
+    WristX = results[0].pose.rightWrist.x;
+    WristY = results[0].pose.rightWrist.y;
+
+    Wrist_Score = result[0].pose.keypoints[10].score;
+  }
+}
+
 function draw(){
   img(video, 0, 0, 700, 600);
+
+  if(Wrist_Score > 0.2)
+  {
+    fill("red");
+    stroke("red");
+    circle(WristX, WristY, 3);
+  }
 
  background(0); 
 
